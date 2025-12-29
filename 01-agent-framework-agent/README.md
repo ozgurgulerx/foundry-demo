@@ -1,203 +1,61 @@
 # 01 — Agent Framework Agent (Local “Hello Agent”)
 
-This step is intentionally “boring”: a minimal Microsoft Agent Framework agent that runs on your own compute and calls an Azure-hosted model over HTTPS. That baseline is what makes every later platform capability provable.
+If you’ve built “agents” before, this step will feel familiar: it’s an application you run (laptop/VM/container/CI) that calls Azure-hosted models over HTTPS. That familiarity is the point. Before we introduce any platform abstraction, we want a baseline where behavior, tool calling, and trace signals are attributable to *your code*, running in *your runtime*.
 
-## Agents in Azure AI Foundry: Execution Models Explained
+## Agents in Azure AI Foundry: execution models (the platform shift)
 
 ![Foundry Agent Service overview diagram](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/media/agent-service-the-glue.png?view=foundry-classic)
 
+![Containerized agents illustration](https://rios.engineer/wp-content/uploads/2024/03/ado-agent-aci-feature.png)
 
-This repository intentionally demonstrates **three distinct agent execution models** that coexist in Azure AI Foundry today. They are not incremental variations of the same thing — they represent **different levels of control over the agent runtime**.
+Azure AI Foundry currently supports multiple “agent” execution models that coexist. They’re not just feature variations; they are different **execution substrates**. The substrate determines what can be governed, what can be observed end-to-end, and what can be made operationally deterministic.
 
-Understanding this distinction is critical to understanding *why* Foundry Agent Service, Agent ID, MCP, and workflows now work the way they do.
+### Substrate comparison (what really changes)
 
----
+| Execution model | Where code runs | Deployment artifact | Dependency control | Identity & governance | Best for |
+| --- | --- | --- | --- | --- | --- |
+| Agent Framework agent | Your compute | Your repo/build | Full control | Optional/indirect | Proving logic, tools, and signals early |
+| Foundry Agent Service (non-hosted) | Foundry-managed runtime | Configuration | Limited | Partial/limited boundaries | Zero-ops experimentation and UX-first agents |
+| Foundry Hosted Agents | Containerized runtime | Versioned deployable | Full (within your container) | Strong (Agent ID, policies, lifecycle) | Enterprise workflows, MCP, A2A, governed tool access |
 
-## 1. Agent Framework Agent (Local Compute, API-Driven)
+## 1) Agent Framework agent (local compute, API-driven)
 
-**What it is**
+In this model, an agent is simply software you run. You own the process lifecycle, the runtime, and the dependencies; Azure provides the model endpoint and (when you wire it in) the tracing backend. The agent calls Azure OpenAI / Foundry models over HTTPS and behaves like any other application that depends on a cloud API.
 
-A traditional, code-defined agent built using **Microsoft Agent Framework**, running on **your own compute** (laptop, VM, container, CI runner).
+The mental model is: *an agent is an application that happens to call Azure-hosted models.* This repo starts here because it lets you validate reasoning and tool-calling semantics before any managed runtime enters the picture.
 
-**Characteristics**
+**Where this is in the repo:** `01-agent-framework-agent/`
 
-- You own:
-  - process lifecycle
-  - dependencies
-  - execution environment
-- Azure provides:
-  - model endpoints
-  - tracing backends
-  - identity primitives (optionally)
-- The agent calls Azure OpenAI / Foundry models **over HTTPS**
+## 2) Foundry Agent Service (managed runtime, non-containerized)
 
-**Mental model**
+This is the configuration-first model: you define the agent’s identity, instructions, tools, and grounding, but execution happens inside a shared managed runtime. You don’t deploy software, and you can’t bring arbitrary dependencies. That’s an intentional trade: speed and UX abstraction over runtime control.
 
-> An agent is an application you run, that happens to call Azure-hosted models.
+For serious enterprise composition (agent-to-agent flows, MCP tool servers, strict operational boundaries), that opacity becomes a constraint. It’s not “worse”, it’s a different substrate with different guarantees.
 
-**Why this matters**
+## 3) Foundry Hosted Agents (containerized, code-first)
 
-This is the **baseline**. It proves:
+Hosted Agents are the real shift. Once the agent becomes a containerized, versioned workload, Foundry can act as a control plane rather than a black-box runtime: deploy/version/rollback, correlate traces consistently, and enforce identity-based governance. This is the substrate that makes stable Agent IDs, Conditional Access, deterministic observability boundaries, and “enterprise-safe MCP” practical.
 
-- the agent logic
-- tool calling
-- reasoning behavior
-- trace emission
+**Where this shows up next:** `04-azd-deploy-hosted-agent/`
 
-before *any* platform abstraction is introduced.
+## Why this step comes first
 
-**Where in this repo**
-
-`01-agent-framework-agent/`
-
-This step is intentionally boring — and that’s the point.
-
----
-
-## 2. Foundry Agent Service Agent (Managed Runtime, Non-Containerized)
-
-**What it is**
-
-An agent defined *in code*, but executed **inside the Foundry Agent Service runtime** — **without containerization**.
-
-This is what most people historically meant by “Foundry agents”.
-
-**Characteristics**
-
-- Azure manages:
-  - execution runtime
-  - scaling
-  - lifecycle
-- You define:
-  - agent identity
-  - instructions
-  - tools
-  - grounding
-- You **do not deploy software**
-- You **cannot bring arbitrary dependencies**
-- Execution happens in a **shared, opaque service**
-
-**Mental model**
-
-> An agent is a configured inference behavior inside Azure.
-
-**Limitations (by design)**
-
-- No custom runtime
-- No system-level control
-- No deterministic lifecycle
-- Limited observability boundaries
-
-This model is powerful for **configuration-first agents**, but it is not suitable for:
-
-- enterprise workflows
-- regulated environments
-- agent-to-agent composition
-- MCP tool servers
-
-**Why it still exists**
-
-Because it offers:
-
-- zero-ops onboarding
-- fast experimentation
-- strong UX abstraction
-
-**Where this shows up**
-
-This repo treats this model as an **intermediate abstraction**, not the end state.
-
----
-
-## 3. Foundry Agent Service — Hosted Agents (Containerized, Code-First)
-
-Hosted Agents are not just “better agents”.
-They are a **new execution substrate**.
-
-**What changed**
-
-Foundry agents are now:
-
-- containerized
-- code-defined
-- versioned artifacts
-- identity-bearing workloads
-- schedulable compute
-
-Azure did not just add a feature — it **replaced the execution model**.
-
-**Mental model**
-
-> An agent is a deployed application that speaks the Foundry Agent protocol.
-
-This aligns agents with:
-
-- Azure Functions
-- App Service
-- Containers
-- Kubernetes workloads
-
-…but purpose-built for:
-
-- conversations
-- tool calling
-- MCP
-- agent identity
-- governance
-
-**Why containerization is the hard boundary**
-
-Once agents are containers, the platform can finally provide:
-
-- stable Agent IDs
-- Conditional Access enforcement
-- deterministic observability
-- MCP tool consumption *and* exposure
-- agent-to-agent workflows
-- lifecycle management (deploy, version, rollback)
-
-None of this is reliable without containers.
-
-**Where in this repo**
-
-`02-azd-deploy-hosted-agent`
-
-This step shows:
-
-- how the same agent logic becomes a **deployable workload**
-- how Foundry becomes a **control plane**, not a runtime black box
-
----
-
-
-## Key takeaway
-
-The real evolution is not “hosted vs non-hosted agents”.
-
-It is:
-
-> From prompt-defined agents → containerized, code-first agent workloads
-
-Everything else — Agent ID, MCP, A2A workflows, governance — is downstream of that single architectural change.
-
-
----
+The workshop is linear because the platform evolution is linear: prove behavior first (agent logic), then prove signals (observability and wiring), then cross the container boundary (hosted agents), then prove governance (Agent ID/CA, MCP/APIM policies, workflows). Each step answers: *what becomes possible only after this execution model exists?*
 
 ## Run locally
 
-Prereqs:
-- Complete `00-environment-setup/` and create `.env` from `00-environment-setup/.env.example`
-- Ensure `.env` includes `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_API_VERSION`, and a deployment name
+After completing `00-environment-setup/` and creating `.env` from `00-environment-setup/.env.example`, run:
 
-Commands:
-- `python3 01-agent-framework-agent/agent/hello_agent.py`
-- `python3 01-agent-framework-agent/agent/hello_agent_reasoning_min.py`
+```bash
+python3 01-agent-framework-agent/agent/hello_agent.py
+python3 01-agent-framework-agent/agent/hello_agent_reasoning_min.py
+```
 
-## Proof (checklist)
+## Proof
 
-- [ ] Agent runs locally and returns a model response
-- [ ] Environment variables load from `.env`
+You’re done with this step when the agent returns a model response using values loaded from `.env`.
 
 ## Next
 
 Continue to `../02-observability-otel-to-appinsights`.
+
