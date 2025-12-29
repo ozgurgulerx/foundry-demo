@@ -6,7 +6,6 @@ If you’ve built “agents” before, this step will feel familiar: it’s an a
 
 ![Foundry Agent Service overview diagram](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/media/agent-service-the-glue.png?view=foundry-classic)
 
-![Containerized agents illustration](https://rios.engineer/wp-content/uploads/2024/03/ado-agent-aci-feature.png)
 
 Azure AI Foundry currently supports multiple “agent” execution models that coexist. They’re not just feature variations; they are different **execution substrates**. The substrate determines what can be governed, what can be observed end-to-end, and what can be made operationally deterministic.
 
