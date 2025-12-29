@@ -12,9 +12,10 @@ This repo is a hands-on demo that showcases the most important **new capabilitie
 
 - [What this demo proves](#what-this-demo-proves-not-just-shows)
 - [End-to-end demo flow](#end-to-end-demo-flow-with-proof-points)
+- [Workshop structure](#workshop-structure)
 - [Architecture](#architecture-conceptual)
 - [Prerequisites](#prerequisites)
-- [Repo roadmap](#repo-roadmap-what-well-implement-next)
+- [Repo layout](#repo-layout)
 
 ## What this demo proves (not just “shows”)
 
@@ -31,69 +32,42 @@ This repo is a hands-on demo that showcases the most important **new capabilitie
 
 ## End-to-end demo flow (with proof points)
 
-0. **Pre-req plumbing (so later steps are real)**
-   - Foundry project + model deployment
-   - Application Insights connected (tracing enabled)
-   - API Management with **AI Gateway enabled**
-   - Azure AI Search + **Foundry IQ knowledge base**
-   - ✅ Proof: each resource exists and is linked (Foundry project settings + Azure resource inventory)
+This repo is organized as a step-by-step workshop. Each step is a folder, and you only advance once the “Proof” checklist is green.
 
-1. **Build the agent (Microsoft Agent Framework)**
-   - Implement agent + tool calling (keep at least one tool call deterministic)
-   - Add OpenTelemetry instrumentation and a stable `gen_ai.agent.id`
-   - ✅ Proof: local run emits traces; tool call shows up as its own span
+1. **Pre-req plumbing (so later steps are real)**
+   - Foundry project + model deployment + tracing and governance backends
+   - ✅ Proof: resources exist and are wired correctly
+2. **Build + instrument the agent**
+   - Agent Framework + deterministic tool call + OpenTelemetry + stable `gen_ai.agent.id`
+   - ✅ Proof: local runs emit trace spans including tool calls and failures
+3. **Host + govern**
+   - Deploy as a Foundry hosted agent with `azd`; enforce Entra Agent ID Conditional Access (Preview)
+   - ✅ Proof: hosted agent is visible/working; CA allows/blocks measurably in Entra logs
+4. **Grounding + enterprise-safe tools**
+   - Foundry IQ retrieval backed by Azure AI Search; Logic Apps MCP server + 3P connectors; APIM AI Gateway policies
+   - ✅ Proof: retrieval spans + citations; APIM rate-limit + injection guardrails + logs
 
-2. **Deploy the agent as a Foundry hosted agent using `azd`**
-   - Use Foundry hosted-agent templates + `azd ai agent …` flow
-   - `azd up` provisions + publishes
-   - ✅ Proof: agent is visible as a **hosted agent** in Foundry; endpoint works
+## Workshop structure
 
-3. **Attach Entra Agent ID policy and prove enforcement**
-   - Create **Conditional Access for Agent ID (Preview)** targeting the agent identity
-   - Make it measurably enforceable (triggerable block condition)
-   - ✅ Proof: Entra sign-in logs show CA result; agent call succeeds/fails accordingly
-
-4. **Observability: traces show in Foundry and App Insights “Agents view”**
-   - Run executions (include ≥1 tool call + ≥1 failure)
-   - Validate trace continuity (agent run → tool invocation → outputs/errors)
-   - ✅ Proof: Foundry tracing timeline + Application Insights Agents view shows runs, latency, errors, token/cost
-
-5. **Foundry IQ grounding and prove retrieval in traces**
-   - Create a Foundry IQ **knowledge base** (Azure AI Search-backed)
-   - Connect it as a retrieval tool (MCP-backed)
-   - Ask a question that requires retrieval and yields citations
-   - ✅ Proof: trace shows retrieval/tool spans; response includes citations/grounding output
-
-6. **Logic Apps as a remote MCP server**
-   - Configure **Logic Apps Standard** as a remote MCP server
-   - Expose one workflow-as-tool (or a small suite)
-   - ✅ Proof: MCP endpoint lists tools; tool invocations map to workflow runs
-
-7. **Logic Apps connectors to 3P services (as MCP tools)**
-   - Build a workflow using a managed connector (Slack/Jira/Salesforce/ServiceNow/etc.)
-   - Expose via MCP server (step 6)
-   - ✅ Proof: MCP tool call triggers workflow + connector action; 3P side shows activity
-
-8. **API Management / AI Gateway in front of MCP + prove “enterprise-safe MCP”**
-   - Put the Logic Apps MCP endpoint behind **APIM AI Gateway**
-   - Configure at least two policies:
-     - Rate limiting (demo burst)
-     - Prompt-injection / content-safety guardrail (block/rewrite/allowlist args)
-   - ✅ Proof: burst → `429` + APIM logs; injection attempt → blocked/rewritten + logged decision
-
-9. **Register in Foundry control plane and consume as tools**
-   - Register/attach **APIM-fronted MCP tools** into Foundry tool catalog / agent config
-   - (Optionally) register a custom agent running “anywhere”
-   - ✅ Proof: tool appears in Foundry; agent calls route through AI Gateway
-
-10. **Logic Apps “use the agent” (Agent Service connector / triggers)**
-   - Workflow invokes the agent, optionally chaining: workflow → agent → MCP tool → 3P connector
-   - ✅ Proof: single run shows the whole chain in traces + workflow run history
-
-11. **Optional: A2A as a first-class capability**
-   - Publish an A2A agent endpoint + agent card JSON
-   - Import as **A2A Agent API** into APIM AI Gateway + apply policies
-   - ✅ Proof: APIM shows A2A tile/config; calls flow through APIM; traces correlate via `gen_ai.agent.id`
+| Step | Folder | Outcome |
+| --- | --- | --- |
+| 00 | `00-environment-setup/` | Local tooling + env ready |
+| 01 | `01-foundry-project-and-model-deployment/` | Foundry project + model deployment |
+| 02 | `02-application-insights-tracing/` | App Insights attached (tracing enabled) |
+| 03 | `03-apim-ai-gateway/` | APIM + AI Gateway for governance |
+| 04 | `04-azure-ai-search-and-foundry-iq/` | Azure AI Search + Foundry IQ KB |
+| 05 | `05-agent-build-with-agent-framework/` | Minimal agent runs locally |
+| 06 | `06-tool-calling-and-otel/` | Deterministic tool + OTel + `gen_ai.agent.id` |
+| 07 | `07-azd-deploy-hosted-agent/` | Hosted agent deployed with `azd` |
+| 08 | `08-entra-agent-id-conditional-access/` | CA enforcement proof |
+| 09 | `09-observability-proof/` | Foundry + App Insights “Agents view” proof |
+| 10 | `10-iq-grounding-proof/` | Retrieval + citations + spans proof |
+| 11 | `11-logic-apps-mcp-server/` | Logic Apps Standard as MCP server |
+| 12 | `12-logic-apps-connectors-as-mcp-tools/` | Connector-backed MCP tools |
+| 13 | `13-apim-ai-gateway-enterprise-safe-mcp/` | APIM policies + diagnostics proof |
+| 14 | `14-foundry-tool-catalog-registration/` | Tools appear in Foundry catalog and route via APIM |
+| 15 | `15-logic-apps-invoke-agent/` | Workflow invokes agent (optional chain) |
+| 16 | `16-optional-a2a-agent-api-in-apim/` | Optional A2A import into APIM |
 
 ## Architecture (conceptual)
 
@@ -120,18 +94,14 @@ EA[Entra Agent ID + CA] -->|enforce| A
 - Local tooling (exact commands/templates will be documented as the repo fills in):
   - `az` (Azure CLI)
   - `azd` (Azure Developer CLI) + the Azure AI Foundry extension
-  - A way to run the agent locally (language/runtime depends on the agent implementation we add next)
+  - A way to run the agent locally (this repo starts with Python)
 
-## Repo roadmap (what we’ll implement next)
+## Repo layout
 
-This README is the contract; the repo will grow into a “proof bundle” where each step has runnable code + a verification checklist.
-
-- `docs/00-prereqs.md`: resource setup and wiring (Foundry, App Insights, APIM AI Gateway, Search, IQ)
-- `src/agent/`: Agent Framework implementation + deterministic tool + OTel (`gen_ai.agent.id`)
-- `infra/`: `azd` + IaC (Bicep) for provisioning and deployment
-- `tools/mcp/logicapps/`: Logic Apps Standard MCP server + workflow-tools
-- `apim/`: AI Gateway configuration + policies + diagnostics configuration
-- `docs/validate/`: “Proof” checklists with screenshots/log queries/trace IDs per step
+- Step folders: `00-*/` through `16-*/` (each contains a proof checklist and will accumulate runnable assets)
+- Reference PDFs: `documentation/` (kept out of the workshop flow)
+- Environment template: `.env.example` (copy to `.env`, which is gitignored)
+- Python dependencies: `requirements.txt` (will evolve as the workshop fills in)
 
 ## Notes
 

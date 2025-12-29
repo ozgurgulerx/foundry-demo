@@ -1,2 +1,4 @@
-openai 
+openai
 agent_framework
+python-dotenv
+azd
