@@ -1,7 +1,28 @@
 {
   "permissions": {
     "allow": [
-      "Bash(az cognitiveservices agent:*)"
+      "Bash(az cognitiveservices agent:*)",
+      "Bash(docker build:*)",
+      "Bash(docker push:*)",
+      "Bash(azd config:*)",
+      "Bash(cat:*)",
+      "Bash(az acr show:*)",
+      "Bash(azd deploy:*)",
+      "Bash(AZD_EXT_TIMEOUT=120 azd deploy:*)",
+      "WebSearch",
+      "Bash(python3:*)",
+      "Bash(source venv/bin/activate)",
+      "Bash(pip show:*)",
+      "Bash(source ../venv/bin/activate)",
+      "Bash(/Users/ozgurguler/Developer/Projects/foundry-demo/venv/bin/python3:*)",
+      "Bash(docker run:*)",
+      "Bash(timeout 10 docker run:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker stop:*)",
+      "Bash(az acr repository show-tags:*)",
+      "Bash(az acr repository:*)",
+      "Bash(az role assignment create:*)",
+      "Bash(az role assignment:*)"
     ]
   }
 }

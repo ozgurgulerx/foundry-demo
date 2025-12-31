@@ -15,14 +15,14 @@ credential = DefaultAzureCredential()
 client = AIProjectClient(endpoint=endpoint, credential=credential)
 
 HOSTED_AGENT_NAME = "my-hosted-agent"
-IMAGE_REF = "containervault01.azurecr.io/my-hosted-agent:v5"
-HOSTED_CPU = "2"
-HOSTED_MEMORY = "4Gi"
-CONTAINER_PROTOCOL_VERSION = "1"
+IMAGE_REF = "containervault01.azurecr.io/my-hosted-agent:v8"
+HOSTED_CPU = "1"
+HOSTED_MEMORY = "2Gi"
+CONTAINER_PROTOCOL_VERSION = "v1"
 
 env_vars = {
     "AZURE_AI_PROJECT_ENDPOINT": endpoint,
-    "MODEL_DEPLOYMENT_NAME": "gpt-4o-mini",
+    "AZURE_AI_MODEL_DEPLOYMENT_NAME": "gpt-4o-mini",
 }
 
 print(f"Creating agent version for {HOSTED_AGENT_NAME}")
@@ -32,7 +32,7 @@ print(f"  CPU: {HOSTED_CPU}, Memory: {HOSTED_MEMORY}")
 # Create new version with v3 image
 agent_version = client.agents.create_version(
     agent_name=HOSTED_AGENT_NAME,
-    description="v9: AzureAIClient simplified pattern, v5 image",
+    description="v14: Echo agent with correct protocol version v1, v8 image",
     definition=ImageBasedHostedAgentDefinition(
         container_protocol_versions=[
             ProtocolVersionRecord(protocol=AgentProtocol.RESPONSES, version=CONTAINER_PROTOCOL_VERSION)

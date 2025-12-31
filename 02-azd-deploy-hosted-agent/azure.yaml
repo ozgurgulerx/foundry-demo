@@ -36,8 +36,8 @@ hooks:
         shell: sh
         run: |
             echo "Validating agent configuration..."
-            if [ ! -f "./hosted_agent_app/agent.yaml" ]; then
-              echo "Error: agent.yaml not found"
+            if [ ! -f "./src/my-hosted-agent/main.py" ]; then
+              echo "Error: main.py not found"
               exit 1
             fi
             echo "Validation passed."
