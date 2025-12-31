@@ -1,0 +1,15 @@
+# Azure AI Agent Framework and Hosting Adapter
+azure-ai-agentserver-core
+azure-ai-agentserver-agentframework
+
+# Azure SDK dependencies
+azure-identity
+azure-ai-projects
+
+# Utilities
+python-dotenv
+
+# Optional: Add your framework dependencies here
+# langchain
+# langgraph
+# openai

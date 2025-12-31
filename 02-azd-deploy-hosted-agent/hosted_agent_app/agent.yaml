@@ -1,0 +1,38 @@
+name: my-hosted-agent
+description: "Hosted agent deployed via Azure Developer CLI (azd)"
+
+# Metadata tags for discovery
+metadata:
+  tags:
+    - Azure AI Foundry
+    - Hosted Agent
+    - Microsoft Agent Framework
+
+# Template configuration for hosted agents
+template:
+  kind: hosted
+
+  # Protocol support - responses API for Foundry compatibility
+  protocol:
+    - protocol: responses
+      version: v1
+
+  # Resource allocation
+  cpu: "2"
+  memory: "4Gi"
+
+  # Environment variables passed to the container
+  # These use azd variable substitution syntax
+  environment_variables:
+    AZURE_AI_PROJECT_ENDPOINT: "{{AZURE_AI_PROJECT_ENDPOINT}}"
+    MODEL_DEPLOYMENT_NAME: "{{MODEL_DEPLOYMENT_NAME}}"
+
+# Optional: Define tools the agent can use
+# Uncomment and configure as needed
+# tools:
+#   - kind: tool
+#     id: code_interpreter
+#   - kind: tool
+#     id: bing_grounding
+#   - kind: mcp
+#     project_connection_id: "{{MCP_CONNECTION_ID}}"
