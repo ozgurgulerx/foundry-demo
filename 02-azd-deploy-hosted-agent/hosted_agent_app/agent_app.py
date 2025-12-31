@@ -22,7 +22,7 @@ def main():
     # Docs conceptually show one-line hosting like: from_langgraph(my_agent).run()
     # For Agent Framework wrapper we use from_agent_framework.
     server = from_agent_framework(my_agent)
-    server.run()  # Uses default port 8088, binds to 0.0.0.0 internally
+    server.run(host="0.0.0.0", port=8088)
 
 if __name__ == "__main__":
     main()
