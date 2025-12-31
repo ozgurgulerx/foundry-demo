@@ -1,0 +1,11 @@
+# Microsoft Agent Framework (core)
+agent-framework-core
+
+# Azure AI Hosting Adapter
+azure-ai-agentserver-agentframework
+
+# Azure SDK dependencies
+azure-identity
+
+# Utilities
+python-dotenv

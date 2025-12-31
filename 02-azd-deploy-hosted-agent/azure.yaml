@@ -1,66 +1,43 @@
-# Azure Developer CLI (azd) configuration
-# Deploy hosted agents to Azure AI Foundry
-#
-# Usage:
-#   azd auth login                    # Authenticate with Azure
-#   azd ai agent init --project-id <project-resource-id>  # Initialize for existing project
-#   azd up                            # Deploy everything
-#
-# Or with the starter template:
-#   azd init -t https://github.com/Azure-Samples/azd-ai-starter-basic
-#   azd ai agent init -m hosted_agent_app/agent.yaml
-#   azd up
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
 name: foundry-hosted-agent
-
-# Metadata
 metadata:
-  template: azd-ai-foundry-hosted-agent
-
-# Services to deploy
+    template: azd-ai-foundry-hosted-agent
 services:
-  # Hosted agent service
-  my-hosted-agent:
-    # Path to agent code
-    project: ./hosted_agent_app
-
-    # Use Docker for containerization
-    host: containerapp
-
-    # Language runtime
-    language: python
-
-    # Agent manifest file
-    # This tells azd how to configure the hosted agent
-    module: ./hosted_agent_app/agent.yaml
-
-# Infrastructure configuration
-# azd will provision these resources if they don't exist
+    my-hosted-agent:
+        project: src/my-hosted-agent
+        host: azure.ai.agent
+        language: docker
+        docker:
+            remoteBuild: true
+        config:
+            container:
+                resources:
+                    cpu: "1"
+                    memory: 2Gi
+                scale:
+                    maxReplicas: 3
+                    minReplicas: 1
 infra:
-  provider: bicep
-  path: ./infra
-
-# Hooks for custom actions
+    provider: bicep
+    path: ./infra
 hooks:
-  # Pre-deploy validation
-  predeploy:
-    shell: sh
-    run: |
-      echo "Validating agent configuration..."
-      if [ ! -f "./hosted_agent_app/agent.yaml" ]; then
-        echo "Error: agent.yaml not found"
-        exit 1
-      fi
-      echo "Validation passed."
-
-  # Post-deploy notification
-  postdeploy:
-    shell: sh
-    run: |
-      echo ""
-      echo "=========================================="
-      echo "Hosted agent deployed successfully!"
-      echo "=========================================="
-      echo ""
-      echo "To invoke your agent, use the Foundry SDK or Portal."
-      echo ""
+    postdeploy:
+        shell: sh
+        run: |
+            echo ""
+            echo "=========================================="
+            echo "Hosted agent deployed successfully!"
+            echo "=========================================="
+            echo ""
+            echo "To invoke your agent, use the Foundry SDK or Portal."
+            echo ""
+    predeploy:
+        shell: sh
+        run: |
+            echo "Validating agent configuration..."
+            if [ ! -f "./hosted_agent_app/agent.yaml" ]; then
+              echo "Error: agent.yaml not found"
+              exit 1
+            fi
+            echo "Validation passed."
