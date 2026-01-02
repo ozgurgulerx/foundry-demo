@@ -1,20 +1,58 @@
-# 12 — Logic Apps Connectors to 3P Services (as MCP Tools)
+# 08 — Logic Apps Connectors as MCP Tools
 
 ## Goal
-Create an MCP tool backed by a Logic Apps workflow that calls a managed connector (Slack/Jira/Salesforce/ServiceNow/etc.).
+Use 1,400+ Logic Apps connectors (Salesforce, ServiceNow, SAP, etc.) as AI agent tools via MCP.
 
-## You will end with
-- A workflow that uses a connector action
-- The workflow exposed as an MCP tool via the MCP server from step 11
+## Supported Connectors
 
-## Prerequisites
-- Completed `../11-logic-apps-mcp-server`
+| Connector | Use Cases |
+|-----------|----------|
+| **Salesforce** | Query contacts, create opportunities, update accounts |
+| **ServiceNow** | Create incidents, update tickets, assign tasks |
+| **SAP** | Read business data, trigger workflows |
+| **Dynamics 365** | CRM operations, sales pipeline |
+| **SQL/Dataverse** | Database queries, record updates |
 
-## Proof (checklist)
-- [ ] MCP tool call triggers a Logic Apps run
+## Quick Start
+
+```python
+from azure.ai.agents.models import McpTool
+
+# ServiceNow connector as MCP tool
+servicenow_tool = McpTool(
+    server_label="servicenow",
+    server_url="https://<logic-app>.azurewebsites.net/api/mcpservers/servicenow/mcp",
+    allowed_tools=["CreateIncident", "UpdateIncident"],
+)
+
+# Create agent with connector
+agent = client.agents.create_agent(
+    model="gpt-5-nano",
+    name="it-support-agent",
+    tools=servicenow_tool.definitions,
+)
+```
+
+## Setup via Foundry Portal
+
+1. Go to **Agent Tools** catalog
+2. Search for connector (e.g., "Salesforce")
+3. Select Logic App resource
+4. Choose operations to expose
+5. Configure parameters
+6. Register in Foundry
+
+## Proof (Checklist)
+- [ ] MCP tool call triggers Logic Apps run
 - [ ] Connector action executes successfully
-- [ ] The third-party system shows the corresponding activity
+- [ ] Third-party system shows activity
+
+## Files
+- `connectors-mcp.ipynb` - Examples for ServiceNow, Salesforce
+
+## Sources
+- [Logic Apps Connectors as MCP Tools](https://techcommunity.microsoft.com/blog/integrationsonazureblog/🎙️public-preview-azure-logic-apps-connectors-as-mcp-tools-in-microsoft-foundry/4473062)
+- [Agentic Integration with SAP, ServiceNow, Salesforce](https://techcommunity.microsoft.com/blog/azurearchitectureblog/agentic-integration-with-sap-servicenow-and-salesforce/4466049)
 
 ## Next
-Continue to `../13-apim-ai-gateway-enterprise-safe-mcp`.
-
+Continue to `../09-apim-ai-gateway-mcp`.

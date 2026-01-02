@@ -22,7 +22,16 @@
       "Bash(az acr repository show-tags:*)",
       "Bash(az acr repository:*)",
       "Bash(az role assignment create:*)",
-      "Bash(az role assignment:*)"
+      "Bash(az role assignment:*)",
+      "WebFetch(domain:techcommunity.microsoft.com)",
+      "Bash(az cognitiveservices account deployment list:*)",
+      "Bash(az cognitiveservices account deployment create:*)",
+      "Bash(az cognitiveservices account list-models:*)",
+      "Bash(AZD_EXT_TIMEOUT=600 azd deploy:*)",
+      "Bash(az cognitiveservices agent:show:*)",
+      "Bash(az containerapp logs show:*)",
+      "Bash(az containerapp list:*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
