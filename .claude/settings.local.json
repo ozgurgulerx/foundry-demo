@@ -43,7 +43,8 @@
       "Bash(az cognitiveservices agent stop:*)",
       "Bash(git push:*)",
       "Bash(ping:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(AZD_EXT_TIMEOUT=180 azd deploy:*)"
     ]
   }
 }

@@ -3,3 +3,7 @@ agent-framework-core
 
 # Azure AI Hosting Adapter
 azure-ai-agentserver-agentframework
+
+# Azure OpenAI
+openai
+azure-identity

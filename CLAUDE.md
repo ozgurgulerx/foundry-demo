@@ -3,11 +3,17 @@
 ## Project Overview
 This repository contains demos for Microsoft Azure AI Foundry hosted agents using the Microsoft Agent Framework.
 
+
+##Key Guidance
+Check the documentation under /99-reference to double check the correct methods when not clear
+
 ## Key Directories
 - `01-agent-framework-foundry-hosted-agents/` - Local agent examples using Agent Framework
 - `02-azd-deploy-hosted-agent/` - Azure Developer CLI (azd) deployment for hosted agents
 
 ## Hosted Agent Deployment (02-azd-deploy-hosted-agent)
+
+
 
 ### Important Files
 - `src/my-hosted-agent/main.py` - Agent code (must extend BaseAgent with `run` and `run_stream` methods)
