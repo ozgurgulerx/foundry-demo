@@ -40,7 +40,10 @@
       "Bash(az cognitiveservices agent create:*)",
       "Bash(az acr show:*)",
       "Bash(az cognitiveservices account deployment list:*)",
-      "Bash(az cognitiveservices agent stop:*)"
+      "Bash(az cognitiveservices agent stop:*)",
+      "Bash(git push:*)",
+      "Bash(ping:*)",
+      "Bash(curl:*)"
     ]
   }
 }
