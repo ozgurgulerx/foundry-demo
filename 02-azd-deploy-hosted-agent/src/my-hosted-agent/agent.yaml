@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/AgentSchema/refs/heads/main/schemas/v1.0/ContainerAgent.yaml
 
 kind: hosted
-name: chatbot-gpt5nano
+name: agent-jj25nd
 description: |
     Chatbot agent powered by Azure OpenAI gpt-5-nano. Uses the BaseAgent pattern with streaming support.
 metadata:
