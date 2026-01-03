@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/AgentSchema/refs/heads/main/schemas/v1.0/ContainerAgent.yaml
 
 kind: hosted
-name: my-hosted-agent
+name: echo-za9g
 description: |
     Hosted agent deployed via Azure Developer CLI (azd). Uses the BaseAgent pattern with streaming support.
 metadata:

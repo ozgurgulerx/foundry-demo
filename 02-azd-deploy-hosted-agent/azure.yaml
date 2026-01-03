@@ -4,7 +4,7 @@ name: foundry-hosted-agent
 metadata:
     template: azd-ai-foundry-hosted-agent
 services:
-    my-hosted-agent:
+    agent-lzooao:
         project: src/my-hosted-agent
         host: azure.ai.agent
         language: docker

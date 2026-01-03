@@ -2,15 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy application code
+# Install runtime deps
 COPY . /app
 
-# Install dependencies from requirements.txt
-RUN pip install --no-cache-dir -U pip \
-    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -U pip     && pip install --no-cache-dir -U python-dotenv azure-identity azure-ai-projects     && pip install --no-cache-dir -U azure-ai-agentserver-core azure-ai-agentserver-agentframework
 
-# Expose the hosting adapter port
 EXPOSE 8088
 
-# Run the agent (main.py uses BaseAgent pattern)
-CMD ["python", "main.py"]
+CMD ["python", "agent_app.py"]

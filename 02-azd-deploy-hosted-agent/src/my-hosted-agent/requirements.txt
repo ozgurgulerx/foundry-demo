@@ -1,4 +1,4 @@
-# Microsoft Agent Framework (core)
+# Agent Framework
 agent-framework-core
 
 # Azure AI Hosting Adapter

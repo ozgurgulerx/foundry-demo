@@ -1,7 +1,46 @@
 {
   "permissions": {
     "allow": [
-      "Bash(time python3:*)"
+      "Bash(time python3:*)",
+      "Bash(cat:*)",
+      "Bash(source /tmp/agent_config.env)",
+      "Bash(echo:*)",
+      "Bash(docker build:*)",
+      "Bash(az acr login:*)",
+      "Bash(ACR_LOGIN_SERVER=\"$ACR_NAME.azurecr.io\")",
+      "Bash(IMAGE_REF=\"$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG\")",
+      "Bash(docker tag:*)",
+      "Bash(docker push:*)",
+      "Bash(/Users/ozgurguler/Developer/Projects/foundry-demo/venv/bin/python:*)",
+      "Bash(chmod:*)",
+      "Bash(/tmp/poll_agent.sh)",
+      "Bash(az cognitiveservices agent start:*)",
+      "Bash(/tmp/poll_agent2.sh)",
+      "Bash(azd up:*)",
+      "Bash(azd deploy:*)",
+      "Bash(AZD_EXT_TIMEOUT=120 azd deploy:*)",
+      "Bash(az cognitiveservices agent show:*)",
+      "Bash(python3:*)",
+      "Bash(for i in 1 2 3 4 5 6)",
+      "Bash(do echo 'Check $i at $\\(date\\)')",
+      "Bash(break)",
+      "Bash(done)",
+      "Bash(for i in 1 2 3 4 5 6 7 8)",
+      "Bash(do az cognitiveservices agent start --account-name ozgurguler-7212-resource --project-name ozgurguler-7212 --name my-hosted-agent --agent-version 35 -o json)",
+      "Bash(rc=$?)",
+      "Bash(if [ $rc -eq 0 ])",
+      "Bash(then echo \"SUCCESS - Agent is Running!\")",
+      "Bash(elif [ $rc -eq 1 ])",
+      "Bash(then echo \"FAILED - Agent failed to start\")",
+      "Bash(fi)",
+      "Bash(az acr list:*)",
+      "Bash(az cognitiveservices agent list:*)",
+      "Bash(az acr repository list:*)",
+      "Bash(az acr repository show-tags:*)",
+      "Bash(az cognitiveservices agent create:*)",
+      "Bash(az acr show:*)",
+      "Bash(az cognitiveservices account deployment list:*)",
+      "Bash(az cognitiveservices agent stop:*)"
     ]
   }
 }
