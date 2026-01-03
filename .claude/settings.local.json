@@ -45,7 +45,9 @@
       "Bash(ping:*)",
       "Bash(curl:*)",
       "Bash(AZD_EXT_TIMEOUT=180 azd deploy:*)",
-      "mcp__ide__executeCode"
+      "mcp__ide__executeCode",
+      "Bash(brew list:*)",
+      "Bash(pdftotext:*)"
     ]
   }
 }
