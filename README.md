@@ -10,7 +10,15 @@
 
 ![Ignite demo storyline](.assets/images/Gemini_Generated_Image_frkx50frkx50frkx.png)
 
-This repo is a hands-on workshop for Microsoft Ignite 2025 announcements around Azure AI Foundry. You move from a local Agent Framework script to a governed hosted agent with grounded knowledge, end-to-end tracing, Entra Agent ID Conditional Access, Logic Apps MCP tooling behind APIM AI Gateway, and tool registration in the Foundry control plane.
+This repo is a hands-on workshop for Microsoft Ignite 2025 announcements around Azure AI Foundry.
+
+### Foundry Hosted Agent Architecture
+
+![Foundry Hosted Agent](.assets/images/foundry_hosted_agent.png)
+
+The hosted agent lifecycle: **Deploy → Govern → Publish → Share** — containerized agents deployed through `azd`, governed by Foundry control plane, and exposed as managed endpoints.
+
+You move from a local Agent Framework script to a governed hosted agent with grounded knowledge, end-to-end tracing, Entra Agent ID Conditional Access, Logic Apps MCP tooling behind APIM AI Gateway, and tool registration in the Foundry control plane.
 
 ## What you prove
 - Local Agent Framework runs hit your Foundry or Azure OpenAI deployment using `.env` secrets.

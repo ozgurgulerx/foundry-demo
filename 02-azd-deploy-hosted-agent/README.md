@@ -1,7 +1,13 @@
-# 07 — Deploy as a Foundry Hosted Agent (azd)
+# 02 — Deploy as a Foundry Hosted Agent (azd)
 
 ## Goal
 Deploy the agent as a Foundry hosted agent using `azd` so it runs as a managed service.
+
+## Architecture
+
+![Foundry Hosted Agent Architecture](../.assets/images/foundry_hosted_agent.png)
+
+The diagram shows the complete lifecycle: **Deploy → Govern → Publish → Share** — from developer code through Azure infrastructure to the Foundry control plane and agent service.
 
 ## You will end with
 - Infrastructure provisioned via `azd`
