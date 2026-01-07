@@ -47,7 +47,11 @@
       "Bash(AZD_EXT_TIMEOUT=180 azd deploy:*)",
       "mcp__ide__executeCode",
       "Bash(brew list:*)",
-      "Bash(pdftotext:*)"
+      "Bash(pdftotext:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git -C /Users/ozgurguler/Developer/Projects/foundry-demo status)",
+      "Bash(git -C /Users/ozgurguler/Developer/Projects/foundry-demo log --oneline -3)"
     ]
   }
 }
